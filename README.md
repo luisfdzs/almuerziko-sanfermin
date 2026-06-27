@@ -10,7 +10,7 @@ con confirmación de asistencia guardada en MongoDB.
 
 - **Cuenta atrás en vivo** hasta el chupinazo (6 de julio, 10:00).
 - **Confirmar asistencia**: con la **clave de la cuadrilla** pones tu nombre y te unes a la **lista de asistentes** (guardada en MongoDB), con cohete + confeti al confirmar. También puedes desapuntarte.
-- **Datos del evento**: lugar (Calle Dormitalería, 74 · Pamplona), hora (10:00) y precio (25 €).
+- **Datos del evento**: lugar (Calle Dormitalería, 74 · Pamplona), hora (10:00) y precio (20 €).
 - **Programa del día** en formato *timeline* que sube de intensidad: de *almorzar tranquilos* al *¡desfase total!*.
 - **Código de vestimenta** (blanco + pañuelico + faja) y aviso de fotógrafo profesional.
 - **Cómo llegar** con enlace directo a Google Maps.
