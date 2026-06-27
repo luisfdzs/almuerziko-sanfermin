@@ -352,6 +352,8 @@
       <form id="rsvp-form" class="rsvp-form" hidden>
         <input id="rsvp-name" type="text" maxlength="40" required
                placeholder="¿Cómo te verán los demás?" autocomplete="name" aria-label="Tu nombre">
+        <input id="rsvp-clave" type="password" required
+               placeholder="🔒 Clave de la cuadrilla" aria-label="Clave de la cuadrilla" autocomplete="off">
         <button class="btn" type="submit" id="rsvp-submit">Confirmar 🧣</button>
       </form>
 
@@ -562,6 +564,7 @@
   var btn=document.getElementById("rsvp-btn"),
       form=document.getElementById("rsvp-form"),
       nameInput=document.getElementById("rsvp-name"),
+      claveInput=document.getElementById("rsvp-clave"),
       submitBtn=document.getElementById("rsvp-submit"),
       done=document.getElementById("rsvp-done"),
       undoBtn=document.getElementById("rsvp-undo"),
@@ -570,10 +573,12 @@
       asisCount=document.getElementById("asis-count"),
       asisEmpty=document.getElementById("asis-empty");
 
-  var STORE_KEY="rsvpName";
+  var STORE_KEY="rsvpName", CLAVE_KEY="rsvpClave";
   function saveName(n){ try{ localStorage.setItem(STORE_KEY,n); }catch(e){} }
   function getSavedName(){ try{ return localStorage.getItem(STORE_KEY); }catch(e){ return null; } }
   function clearName(){ try{ localStorage.removeItem(STORE_KEY); }catch(e){} }
+  function saveClave(c){ try{ localStorage.setItem(CLAVE_KEY,c); }catch(e){} }
+  function getSavedClave(){ try{ return localStorage.getItem(CLAVE_KEY); }catch(e){ return null; } }
 
   function esc(s){return String(s).replace(/[&<>"']/g,function(c){
     return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
@@ -606,53 +611,57 @@
   loadList();
   if(getSavedName()) mostrarConfirmado();
 
+  // helper: hace fetch y devuelve {ok, data} con el JSON ya parseado.
+  function pedir(metodo, payload){
+    return fetch("/api/rsvp",{
+      method:metodo,
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(payload)
+    }).then(function(r){
+      return r.json().catch(function(){return {};}).then(function(d){return {ok:r.ok, data:d};});
+    });
+  }
+
   btn.addEventListener("click",function(){
-    btn.hidden=true; form.hidden=false; nameInput.focus();
+    btn.hidden=true; form.hidden=false;
+    var c=getSavedClave(); if(c) claveInput.value=c; // recordamos la clave de la cuadrilla
+    nameInput.focus();
   });
 
   form.addEventListener("submit",function(e){
     e.preventDefault();
-    var name=nameInput.value.trim();
-    if(!name) return;
+    var name=nameInput.value.trim(), clave=claveInput.value.trim();
+    if(!name||!clave) return;
     submitBtn.disabled=true; submitBtn.textContent="Enviando…";
-    fetch("/api/rsvp",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({name:name})
-    }).then(function(r){
-      if(!r.ok) throw new Error("bad");
-      return r.json();
-    }).then(function(d){
-      if(d&&d.asistentes) renderList(d.asistentes.map(function(a){return a.name;}));
-      saveName(name);
+    pedir("POST",{name:name, clave:clave}).then(function(res){
+      if(!res.ok) throw new Error(res.data&&res.data.error ? res.data.error : "No se pudo guardar");
+      if(res.data.asistentes) renderList(res.data.asistentes.map(function(a){return a.name;}));
+      saveName(name); saveClave(clave);
       form.hidden=true;
       celebrar();
-    }).catch(function(){
+    }).catch(function(err){
       submitBtn.disabled=false; submitBtn.textContent="Confirmar 🧣";
-      alert("Uy, no se pudo guardar tu confirmación. Inténtalo otra vez en un momento.");
+      alert(err.message);
     });
   });
 
   undoBtn.addEventListener("click",function(){
     var name=getSavedName();
     if(!name){ clearName(); reiniciar(); return; }
+    var clave=getSavedClave();
+    if(!clave){ clave=(prompt("Clave de la cuadrilla para desapuntarte:")||"").trim(); }
+    if(!clave) return;
     if(!confirm("¿Seguro que quieres desapuntarte del almuerziko?")) return;
     undoBtn.disabled=true; undoBtn.textContent="Quitando…";
-    fetch("/api/rsvp",{
-      method:"DELETE",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({name:name})
-    }).then(function(r){
-      if(!r.ok) throw new Error("bad");
-      return r.json();
-    }).then(function(d){
-      if(d&&d.asistentes) renderList(d.asistentes.map(function(a){return a.name;}));
+    pedir("DELETE",{name:name, clave:clave}).then(function(res){
+      if(!res.ok) throw new Error(res.data&&res.data.error ? res.data.error : "No se pudo quitar");
+      if(res.data.asistentes) renderList(res.data.asistentes.map(function(a){return a.name;}));
       clearName();
       undoBtn.disabled=false; undoBtn.textContent="¿No puedes al final? Desapuntarme";
       reiniciar();
-    }).catch(function(){
+    }).catch(function(err){
       undoBtn.disabled=false; undoBtn.textContent="¿No puedes al final? Desapuntarme";
-      alert("No se pudo quitar tu confirmación. Inténtalo otra vez en un momento.");
+      alert(err.message);
     });
   });
 

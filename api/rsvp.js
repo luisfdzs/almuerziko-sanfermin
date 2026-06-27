@@ -3,6 +3,30 @@ import { MongoClient } from "mongodb";
 const uri = process.env.MONGODB_URI;
 const DB_NAME = process.env.MONGODB_DB || "Almuerziko";
 const COLLECTION = "asistentes";
+const CLAVE = process.env.RSVP_CLAVE;
+
+// Comprueba la clave de la cuadrilla (solo para apuntarse/desapuntarse).
+// Devuelve true si todo OK; si no, escribe la respuesta de error y devuelve false.
+function claveOk(res, body) {
+  if (!CLAVE) {
+    res.status(503).json({ error: "El registro no está configurado todavía" });
+    return false;
+  }
+  const dada = body && body.clave ? String(body.clave).trim() : "";
+  if (dada !== CLAVE) {
+    res.status(401).json({ error: "Clave de la cuadrilla incorrecta" });
+    return false;
+  }
+  return true;
+}
+
+function parseBody(req) {
+  let body = req.body;
+  if (typeof body === "string") {
+    try { body = JSON.parse(body); } catch { body = {}; }
+  }
+  return body || {};
+}
 
 // Reutilizamos la conexión entre invocaciones (clave en serverless):
 // cada función "fría" abre una conexión, las "calientes" la reaprovechan.
@@ -34,11 +58,10 @@ export default async function handler(req, res) {
     }
 
     if (req.method === "POST") {
-      let body = req.body;
-      if (typeof body === "string") {
-        try { body = JSON.parse(body); } catch { body = {}; }
-      }
-      let name = (body && body.name ? String(body.name) : "")
+      const body = parseBody(req);
+      if (!claveOk(res, body)) return;
+
+      let name = (body.name ? String(body.name) : "")
         .trim()
         .replace(/\s+/g, " ");
 
@@ -58,11 +81,10 @@ export default async function handler(req, res) {
     }
 
     if (req.method === "DELETE") {
-      let body = req.body;
-      if (typeof body === "string") {
-        try { body = JSON.parse(body); } catch { body = {}; }
-      }
-      const name = (body && body.name ? String(body.name) : "")
+      const body = parseBody(req);
+      if (!claveOk(res, body)) return;
+
+      const name = (body.name ? String(body.name) : "")
         .trim()
         .replace(/\s+/g, " ");
 

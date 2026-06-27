@@ -7,7 +7,7 @@ con confirmación de asistencia guardada en MongoDB.
 ## ✨ Qué incluye
 
 - **Cuenta atrás en vivo** hasta el chupinazo (6 de julio, 10:00).
-- **Confirmar asistencia**: pones tu nombre y te unes a la **lista pública de asistentes** (guardada en MongoDB), con cohete + confeti al confirmar.
+- **Confirmar asistencia**: con la **clave de la cuadrilla** pones tu nombre y te unes a la **lista de asistentes** (guardada en MongoDB), con cohete + confeti al confirmar. También puedes desapuntarte.
 - **Datos del evento**: lugar (Calle Dormitalería, 74 · Pamplona), hora (10:00) y precio (25 €).
 - **Programa del día** en formato *timeline* que sube de intensidad: de *almorzar tranquilos* al *¡desfase total!*.
 - **Código de vestimenta** (blanco + pañuelico + faja) y aviso de fotógrafo profesional.
@@ -24,6 +24,7 @@ con confirmación de asistencia guardada en MongoDB.
 1. Crea las variables de entorno en Vercel:
    - `MONGODB_URI` — cadena de conexión de MongoDB Atlas (**obligatoria**).
    - `MONGODB_DB` — nombre de la base de datos (opcional, por defecto `Almuerziko`).
+   - `RSVP_CLAVE` — clave compartida de la cuadrilla (**obligatoria**); se exige para apuntarse/desapuntarse.
 2. Despliega en Vercel (importa el repo o `vercel --prod`).
 
 ### Desarrollo local
