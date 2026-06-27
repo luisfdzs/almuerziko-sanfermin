@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Almuerziko San Fermín · 6 de julio</title>
+<meta name="description" content="Te invito al almuerziko de San Fermín: 6 de julio, 10:00, Calle Dormitalería 74. ¡Blanco y rojo obligatorio!">
+<meta name="theme-color" content="#D81E2C">
+<style>
+  :root{
+    --blanco:#FBF8F3;
+    --blanco-puro:#ffffff;
+    --rojo:#D81E2C;
+    --rojo-hondo:#9E1419;
+    --tinto:#2A0C0E;
+    --oro:#E0A92E;
+    --crema:#F4E9E3;
+    --borde:#E7D3CC;
+    --sombra:rgba(42,12,14,.16);
+
+    --shout:"Arial Black","Helvetica Neue",Impact,"Haettenschweiler",sans-serif;
+    --sans:system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --serif:Georgia,"Times New Roman",serif;
+
+    --pad:clamp(1.25rem,5vw,2.5rem);
+    --maxw:640px;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:var(--sans);
+    color:var(--tinto);
+    background:var(--blanco);
+    line-height:1.55;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* faja: franja roja recurrente */
+  .faja{
+    height:14px;
+    background:repeating-linear-gradient(135deg,var(--rojo) 0 18px,var(--rojo-hondo) 18px 36px);
+  }
+
+  .wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--pad)}
+
+  .eyebrow{
+    font-size:.72rem;font-weight:700;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--rojo);
+  }
+  h2{
+    font-family:var(--shout);
+    font-weight:900;
+    line-height:.92;
+    letter-spacing:-.01em;
+    text-transform:uppercase;
+    text-wrap:balance;
+    font-size:clamp(2rem,9vw,3.1rem);
+  }
+  .lead{font-family:var(--serif);font-style:italic;font-size:1.05rem;color:var(--rojo-hondo)}
+
+  /* ====== HERO ====== */
+  .hero{
+    position:relative;
+    background:var(--rojo);
+    color:var(--blanco-puro);
+    padding:clamp(2.5rem,9vw,4rem) var(--pad) clamp(2rem,7vw,3rem);
+    text-align:center;
+    overflow:hidden;
+  }
+  .hero::before{
+    /* lunares blancos: el pañuelico estampado */
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(circle,rgba(255,255,255,.10) 2px,transparent 3px);
+    background-size:26px 26px;
+    opacity:.6;pointer-events:none;
+  }
+  .hero > *{position:relative;z-index:1}
+  .panuelo{
+    width:64px;height:64px;margin:0 auto .9rem;
+    transform:rotate(45deg);
+    background:var(--blanco-puro);
+    border-radius:6px;
+    display:grid;place-items:center;
+    box-shadow:0 8px 24px rgba(0,0,0,.25);
+  }
+  .panuelo span{transform:rotate(-45deg);font-size:1.7rem}
+  .hero .kicker{
+    font-size:.78rem;font-weight:700;letter-spacing:.34em;text-transform:uppercase;
+    color:rgba(255,255,255,.85);
+  }
+  .hero h1{
+    font-family:var(--shout);
+    font-weight:900;
+    text-transform:uppercase;
+    line-height:.86;
+    letter-spacing:-.015em;
+    font-size:clamp(3.4rem,21vw,7rem);
+    margin:.25rem 0 .15rem;
+    text-shadow:0 4px 0 var(--rojo-hondo),0 6px 18px rgba(0,0,0,.3);
+  }
+  .hero .sub{
+    font-family:var(--serif);font-style:italic;
+    font-size:clamp(1.05rem,4.6vw,1.4rem);
+    color:#fff;
+  }
+  .fecha-chip{
+    display:inline-flex;gap:.55rem;align-items:center;
+    margin-top:1.1rem;padding:.55rem 1.1rem;
+    background:var(--tinto);color:#fff;border-radius:100px;
+    font-weight:700;letter-spacing:.05em;font-size:.95rem;
+  }
+  .fecha-chip b{color:var(--oro)}
+
+  /* ====== CUENTA ATRÁS ====== */
+  .countdown{
+    margin-top:1.6rem;
+    display:flex;justify-content:center;gap:.5rem;
+  }
+  .cd-box{
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.28);
+    border-radius:14px;
+    padding:.7rem .35rem .55rem;
+    min-width:64px;
+    backdrop-filter:blur(2px);
+  }
+  .cd-num{
+    font-family:var(--shout);font-weight:900;font-size:2rem;line-height:1;
+    font-variant-numeric:tabular-nums;display:block;
+  }
+  .cd-lab{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;opacity:.85;margin-top:.3rem}
+  .cd-msg{margin-top:1rem;font-family:var(--serif);font-style:italic;font-size:1.15rem}
+
+  /* ====== SECCIONES ====== */
+  section{padding-block:clamp(2.2rem,7vw,3.4rem)}
+  .section-head{margin-bottom:1.4rem}
+  .section-head .eyebrow{display:block;margin-bottom:.4rem}
+
+  /* tarjetas de datos */
+  .datos{display:grid;gap:1rem}
+  .dato{
+    display:flex;gap:1rem;align-items:center;
+    background:var(--blanco-puro);
+    border:1px solid var(--borde);
+    border-left:6px solid var(--rojo);
+    border-radius:14px;
+    padding:1.05rem 1.2rem;
+    box-shadow:0 4px 14px var(--sombra);
+  }
+  .dato .ic{
+    flex:0 0 auto;width:48px;height:48px;border-radius:12px;
+    background:var(--crema);display:grid;place-items:center;font-size:1.5rem;
+  }
+  .dato .k{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--rojo-hondo);font-weight:700}
+  .dato .v{font-family:var(--shout);font-weight:900;font-size:1.5rem;line-height:1.05;text-transform:uppercase}
+  .dato .vsmall{font-family:var(--shout);font-weight:900;font-size:1.15rem;line-height:1.1;text-transform:uppercase}
+  .dato .note{font-size:.85rem;color:#6b4a4a;font-family:var(--serif);font-style:italic}
+
+  /* ====== PROGRAMA (timeline que sube de intensidad) ====== */
+  .timeline{position:relative;padding-left:3.1rem}
+  .timeline::before{
+    content:"";position:absolute;left:1.05rem;top:.4rem;bottom:.4rem;width:4px;
+    border-radius:4px;
+    background:linear-gradient(var(--oro),var(--rojo) 40%,var(--rojo-hondo));
+  }
+  .evento{position:relative;padding-bottom:1.7rem}
+  .evento:last-child{padding-bottom:0}
+  .evento .hora{
+    position:absolute;left:-3.1rem;top:0;
+    width:2.1rem;height:2.1rem;border-radius:50%;
+    background:#fff;border:4px solid var(--rojo);
+    display:grid;place-items:center;font-size:1rem;z-index:1;
+  }
+  .evento .et-hora{font-family:var(--shout);font-weight:900;font-size:1.1rem;color:var(--rojo)}
+  .evento h3{font-family:var(--shout);font-weight:900;font-size:1.35rem;text-transform:uppercase;line-height:1;margin:.1rem 0 .25rem}
+  .evento p{font-size:.95rem;color:#5c3f3f}
+  /* el clímax */
+  .evento.climax .hora{background:var(--rojo);border-color:var(--oro);box-shadow:0 0 0 6px rgba(224,169,46,.25)}
+  .evento.climax h3{color:var(--rojo)}
+  .evento.desfase h3{
+    font-size:clamp(1.6rem,8vw,2.4rem);
+    background:linear-gradient(95deg,var(--rojo),var(--oro));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+
+  /* ====== DRESS CODE ====== */
+  .dress{background:var(--tinto);color:var(--blanco)}
+  .dress h2{color:#fff}
+  .dress .eyebrow{color:var(--oro)}
+  .dress .lead{color:rgba(255,255,255,.82)}
+  .checklist{list-style:none;display:grid;gap:.7rem;margin-top:1.3rem}
+  .checklist li{display:flex;gap:.8rem;align-items:center;font-weight:600}
+  .checklist .tick{
+    flex:0 0 auto;width:28px;height:28px;border-radius:50%;
+    background:var(--rojo);color:#fff;display:grid;place-items:center;font-size:.9rem;font-weight:900;
+  }
+  .foto-banner{
+    margin-top:1.5rem;padding:1.1rem 1.2rem;border-radius:14px;
+    background:linear-gradient(100deg,var(--rojo-hondo),var(--rojo));
+    display:flex;gap:.9rem;align-items:center;
+  }
+  .foto-banner .em{font-size:2rem}
+  .foto-banner b{display:block;font-family:var(--shout);text-transform:uppercase;font-size:1.05rem}
+  .foto-banner small{color:rgba(255,255,255,.85)}
+
+  /* ====== MAPA ====== */
+  .mapa-card{
+    border:1px solid var(--borde);border-radius:16px;overflow:hidden;
+    background:var(--blanco-puro);box-shadow:0 4px 14px var(--sombra);
+  }
+  .mapa-vista{
+    position:relative;height:170px;
+    background:
+      linear-gradient(transparent 96%,var(--borde) 96%) 0 0/100% 30px,
+      linear-gradient(90deg,transparent 96%,var(--borde) 96%) 0 0/30px 100%,
+      var(--crema);
+  }
+  .mapa-vista .ruta{position:absolute;left:8%;right:30%;top:55%;height:5px;background:var(--rojo);border-radius:5px;transform:rotate(-8deg)}
+  .mapa-vista .pin{
+    position:absolute;right:24%;top:36%;font-size:2.2rem;
+    filter:drop-shadow(0 3px 3px rgba(0,0,0,.3));
+    animation:bob 2.4s ease-in-out infinite;
+  }
+  @keyframes bob{50%{transform:translateY(-7px)}}
+  .mapa-body{padding:1.1rem 1.2rem 1.3rem}
+  .mapa-body .dir{font-family:var(--shout);text-transform:uppercase;font-size:1.2rem;line-height:1.1}
+  .mapa-body .ciudad{color:var(--rojo-hondo);font-weight:600;font-size:.9rem;letter-spacing:.04em}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:.6rem;
+    width:100%;margin-top:1rem;
+    padding:.95rem 1.2rem;border:none;border-radius:100px;cursor:pointer;
+    font-family:var(--sans);font-weight:800;font-size:1rem;letter-spacing:.02em;
+    background:var(--rojo);color:#fff;
+    box-shadow:0 6px 16px rgba(216,30,44,.4);
+    transition:transform .15s ease,box-shadow .15s ease,background .2s ease;
+    text-decoration:none;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(216,30,44,.5)}
+  .btn:active{transform:translateY(0)}
+  .btn:focus-visible{outline:3px solid var(--oro);outline-offset:3px}
+  .btn.ghost{background:var(--tinto);box-shadow:0 6px 16px rgba(42,12,14,.35)}
+
+  /* ====== RSVP ====== */
+  .rsvp{background:var(--rojo);color:#fff;text-align:center;position:relative;overflow:hidden}
+  .rsvp::before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.10) 2px,transparent 3px);background-size:26px 26px;opacity:.5}
+  .rsvp > *{position:relative;z-index:1}
+  .rsvp h2{color:#fff}
+  .rsvp p{color:rgba(255,255,255,.9);margin-top:.5rem}
+  .rsvp .btn{background:#fff;color:var(--rojo);max-width:340px;margin-inline:auto;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+  .rsvp .btn:focus-visible{outline-color:var(--tinto)}
+  #rsvp-done{display:none;margin-top:1.2rem}
+  #rsvp-done .big{font-family:var(--shout);text-transform:uppercase;font-size:1.8rem;line-height:1;margin-bottom:.4rem}
+  #rsvp-done.show{display:block;animation:pop .5s ease}
+  @keyframes pop{0%{transform:scale(.7);opacity:0}60%{transform:scale(1.06)}100%{transform:scale(1);opacity:1}}
+
+  /* cohete */
+  #cohete{
+    position:fixed;left:50%;bottom:-60px;z-index:60;font-size:2.6rem;
+    transform:translateX(-50%);pointer-events:none;opacity:0;
+  }
+  #cohete.lanzar{animation:subir 1s cubic-bezier(.4,0,.5,1) forwards}
+  @keyframes subir{0%{opacity:1;bottom:-60px}85%{opacity:1}100%{opacity:0;bottom:78vh}}
+  #confeti{position:fixed;inset:0;z-index:55;pointer-events:none}
+
+  /* ====== FOOTER ====== */
+  footer{background:var(--tinto);color:rgba(255,255,255,.8);text-align:center;padding:2.2rem var(--pad) 2.6rem}
+  footer .firma{font-family:var(--serif);font-style:italic;font-size:1.15rem;color:#fff}
+  footer .nombre{font-family:var(--shout);text-transform:uppercase;color:var(--oro);font-size:1.6rem;letter-spacing:.02em;margin-top:.2rem}
+  footer .mini{font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;margin-top:1.4rem;opacity:.6}
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+  }
+
+  /* ====== escritorio: el póster respira ====== */
+  @media (min-width:760px){
+    :root{--maxw:780px}
+    .datos{grid-template-columns:1fr 1fr}
+    .dato:first-child{grid-column:1/-1}
+    .hero{padding-block:5rem 3.5rem}
+  }
+</style>
+</head>
+<body>
+
+  <!-- ====== HERO ====== -->
+  <header class="hero">
+    <div class="panuelo"><span>🧣</span></div>
+    <p class="kicker">Te invito al</p>
+    <h1>Almuerziko</h1>
+    <p class="sub">de San Fermín · edición 2026</p>
+
+    <div class="fecha-chip">📅 Lunes <b>6 de julio</b> · 10:00</div>
+
+    <div class="countdown" id="countdown" aria-label="Cuenta atrás para el almuerziko">
+      <div class="cd-box"><span class="cd-num" id="cd-d">--</span><span class="cd-lab">Días</span></div>
+      <div class="cd-box"><span class="cd-num" id="cd-h">--</span><span class="cd-lab">Horas</span></div>
+      <div class="cd-box"><span class="cd-num" id="cd-m">--</span><span class="cd-lab">Min</span></div>
+      <div class="cd-box"><span class="cd-num" id="cd-s">--</span><span class="cd-lab">Seg</span></div>
+    </div>
+    <p class="cd-msg" id="cd-msg">para que suba el cohete 🚀</p>
+  </header>
+
+  <div class="faja"></div>
+
+  <!-- ====== DATOS ====== -->
+  <section class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Lo que necesitas saber</span>
+      <h2>Los datos<br>del sarao</h2>
+    </div>
+    <div class="datos">
+      <div class="dato">
+        <div class="ic">📍</div>
+        <div>
+          <div class="k">Dónde</div>
+          <div class="vsmall">Calle Dormitalería, 74</div>
+          <div class="note">Casco Viejo · Pamplona</div>
+        </div>
+      </div>
+      <div class="dato">
+        <div class="ic">⏰</div>
+        <div>
+          <div class="k">A qué hora</div>
+          <div class="v">10:00</div>
+          <div class="note">Puntualidad navarra, porfa</div>
+        </div>
+      </div>
+      <div class="dato">
+        <div class="ic">💶</div>
+        <div>
+          <div class="k">Cuánto</div>
+          <div class="v">25 €</div>
+          <div class="note">por cabeza · trae el cambio justo</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="faja"></div>
+
+  <!-- ====== PROGRAMA ====== -->
+  <section class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">El plan minuto a minuto</span>
+      <h2>Programa<br>del día</h2>
+      <p class="lead">Aviso: la intensidad solo sube.</p>
+    </div>
+
+    <div class="timeline">
+      <div class="evento">
+        <div class="hora">🍳</div>
+        <span class="et-hora">10:00</span>
+        <h3>Almorzar tranquilos</h3>
+        <p>Sin música, sin prisas. Calentamos motores con el estómago lleno.</p>
+      </div>
+      <div class="evento">
+        <div class="hora">🍷</div>
+        <span class="et-hora">11:00</span>
+        <h3>Empezar a beber</h3>
+        <p>Arranca la maquinaria. A partir de aquí, todo cuesta abajo (y de buen rollo).</p>
+      </div>
+      <div class="evento climax">
+        <div class="hora">🧣</div>
+        <span class="et-hora">12:00</span>
+        <h3>Bendición del pañueliko</h3>
+        <p>El momentazo. Pañuelos al cielo: <strong>¡Viva San Fermín, Gora San Fermín!</strong></p>
+      </div>
+      <div class="evento desfase">
+        <div class="hora">🎉</div>
+        <span class="et-hora">13:00 →</span>
+        <h3>¡Desfase total!</h3>
+        <p>Lo que pase a partir de aquí, se queda en Dormitalería 74.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== DRESS CODE ====== -->
+  <section class="dress">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Normas de la casa</span>
+        <h2>Código de<br>vestimenta</h2>
+        <p class="lead">Blanco impoluto y un toque de rojo. Lo de siempre, vamos.</p>
+      </div>
+      <ul class="checklist">
+        <li><span class="tick">✓</span> Camisa y pantalón <strong>blancos</strong></li>
+        <li><span class="tick">✓</span> <strong>Pañuelico rojo</strong> al cuello</li>
+        <li><span class="tick">✓</span> <strong>Faja roja</strong> a la cintura</li>
+        <li><span class="tick">✓</span> Calzado cómodo (vas a estar de pie un rato)</li>
+      </ul>
+      <div class="foto-banner">
+        <span class="em">📸</span>
+        <div>
+          <b>Ponte guapo/a</b>
+          <small>Habrá fotógrafo profesional para inmortalizar el desfase. Saldrás en las fotos sí o sí.</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="faja"></div>
+
+  <!-- ====== MAPA ====== -->
+  <section class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">No tienes excusa</span>
+      <h2>Cómo llegar</h2>
+    </div>
+    <div class="mapa-card">
+      <div class="mapa-vista" aria-hidden="true">
+        <div class="ruta"></div>
+        <div class="pin">📍</div>
+      </div>
+      <div class="mapa-body">
+        <div class="dir">Calle Dormitalería, 74</div>
+        <div class="ciudad">Casco Viejo · Pamplona</div>
+        <a class="btn" href="https://www.google.com/maps/search/?api=1&query=Calle%20Dormitaler%C3%ADa%2074%2C%20Pamplona" target="_blank" rel="noopener">
+          🗺️ Abrir en Google Maps
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== RSVP ====== -->
+  <section class="rsvp">
+    <div class="wrap">
+      <div class="section-head" style="margin-bottom:.6rem">
+        <span class="eyebrow" style="color:rgba(255,255,255,.85)">El momento de la verdad</span>
+        <h2>¿Te vienes?</h2>
+      </div>
+      <p>Dale al botón y lanza el cohete. Sin papeleos: solo dinos que sí.</p>
+      <button class="btn" id="rsvp-btn">🚀 ¡Allí estaré!</button>
+      <div id="rsvp-done">
+        <div class="big">¡Pañuelico arriba! 🧣</div>
+        <p>Nos vemos el <strong>6 de julio a las 10:00</strong>. ¡A reventar Dormitalería 74!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== FOOTER ====== -->
+  <footer>
+    <p class="firma">Te espera con muchas ganas, Luis —</p>
+    <p class="nombre">Consulado Gallego<br>en Pamplona</p>
+    <p class="mini">San Fermín 2026 · Hecho con código y vino 🍷</p>
+  </footer>
+
+  <div id="cohete">🚀</div>
+  <canvas id="confeti"></canvas>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ===== CUENTA ATRÁS ===== */
+  var target = new Date(2026, 6, 6, 10, 0, 0).getTime(); // 6 julio 2026, 10:00
+  var elD=document.getElementById("cd-d"), elH=document.getElementById("cd-h"),
+      elM=document.getElementById("cd-m"), elS=document.getElementById("cd-s"),
+      msg=document.getElementById("cd-msg");
+  function pad(n){return n<10?"0"+n:""+n;}
+  function tick(){
+    var diff = target - Date.now();
+    if(diff<=0){
+      elD.textContent="00";elH.textContent="00";elM.textContent="00";elS.textContent="00";
+      msg.innerHTML="¡Ya es San Fermín! 🐂 Corre para Dormitalería 74";
+      return;
+    }
+    var s=Math.floor(diff/1000);
+    elD.textContent=pad(Math.floor(s/86400));
+    elH.textContent=pad(Math.floor(s%86400/3600));
+    elM.textContent=pad(Math.floor(s%3600/60));
+    elS.textContent=pad(s%60);
+  }
+  tick(); setInterval(tick,1000);
+
+  /* ===== CONFETI (canvas) ===== */
+  var canvas=document.getElementById("confeti"), ctx=canvas.getContext("2d"), parts=[], raf=null;
+  var colores=["#D81E2C","#ffffff","#E0A92E","#9E1419"];
+  function resize(){canvas.width=innerWidth;canvas.height=innerHeight;}
+  resize(); addEventListener("resize",resize);
+  function burst(x,y,n){
+    for(var i=0;i<n;i++){
+      var a=Math.random()*Math.PI*2, sp=4+Math.random()*7;
+      parts.push({
+        x:x,y:y,
+        vx:Math.cos(a)*sp, vy:Math.sin(a)*sp-4,
+        g:.18+Math.random()*.1,
+        s:6+Math.random()*7,
+        rot:Math.random()*Math.PI, vr:(Math.random()-.5)*.3,
+        c:colores[(Math.random()*colores.length)|0],
+        life:90+Math.random()*40
+      });
+    }
+    if(!raf) loop();
+  }
+  function loop(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    for(var i=parts.length-1;i>=0;i--){
+      var p=parts[i];
+      p.vy+=p.g; p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr; p.life--;
+      if(p.life<=0||p.y>canvas.height+30){parts.splice(i,1);continue;}
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot); ctx.fillStyle=p.c;
+      ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6); ctx.restore();
+    }
+    if(parts.length){raf=requestAnimationFrame(loop);}else{ctx.clearRect(0,0,canvas.width,canvas.height);raf=null;}
+  }
+
+  /* ===== RSVP ===== */
+  var btn=document.getElementById("rsvp-btn"),
+      done=document.getElementById("rsvp-done"),
+      cohete=document.getElementById("cohete");
+  var confirmado=false;
+  btn.addEventListener("click",function(){
+    if(confirmado) return;
+    confirmado=true;
+    btn.disabled=true; btn.style.opacity=".55"; btn.textContent="✓ ¡Confirmado!";
+
+    if(reduce){
+      done.classList.add("show");
+      return;
+    }
+    // lanza el cohete
+    cohete.classList.remove("lanzar"); void cohete.offsetWidth; cohete.classList.add("lanzar");
+    setTimeout(function(){
+      burst(innerWidth/2, innerHeight*0.22, 120);
+      done.classList.add("show");
+    },820);
+  });
+})();
+</script>
+</body>
+</html>
