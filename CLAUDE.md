@@ -18,7 +18,7 @@ Frontend estático + una función serverless. Se despliega en **Vercel** (la web
 
 ### Variables de entorno (en Vercel)
 - `MONGODB_URI` — **obligatoria**. Cadena de conexión de MongoDB Atlas. Nunca se commitea (está en `.gitignore` vía `.env`).
-- `MONGODB_DB` — opcional, nombre de la base de datos (por defecto `sanfermin`). Colección: `asistentes`.
+- `MONGODB_DB` — opcional, nombre de la base de datos (por defecto `Almuerziko`). Colección: `asistentes`.
 
 ### Desarrollo y despliegue
 - **Local con API**: `vercel dev` (ejecuta web + funciones; necesita `MONGODB_URI` en `.env`).

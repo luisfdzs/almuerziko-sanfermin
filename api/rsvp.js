@@ -1,7 +1,7 @@
 import { MongoClient } from "mongodb";
 
 const uri = process.env.MONGODB_URI;
-const DB_NAME = process.env.MONGODB_DB || "sanfermin";
+const DB_NAME = process.env.MONGODB_DB || "Almuerziko";
 const COLLECTION = "asistentes";
 
 // Reutilizamos la conexión entre invocaciones (clave en serverless):

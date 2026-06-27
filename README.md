@@ -23,7 +23,7 @@ con confirmación de asistencia guardada en MongoDB.
 
 1. Crea las variables de entorno en Vercel:
    - `MONGODB_URI` — cadena de conexión de MongoDB Atlas (**obligatoria**).
-   - `MONGODB_DB` — nombre de la base de datos (opcional, por defecto `sanfermin`).
+   - `MONGODB_DB` — nombre de la base de datos (opcional, por defecto `Almuerziko`).
 2. Despliega en Vercel (importa el repo o `vercel --prod`).
 
 ### Desarrollo local
