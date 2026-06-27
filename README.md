@@ -4,6 +4,8 @@ Invitación web para el **almuerziko de San Fermín** del **6 de julio de 2026**
 Una sola página, pensada *mobile-first* y con estética de cartel de fiestas (blanco y rojo),
 con confirmación de asistencia guardada en MongoDB.
 
+🔗 **Web publicada:** https://almuerziko.vercel.app
+
 ## ✨ Qué incluye
 
 - **Cuenta atrás en vivo** hasta el chupinazo (6 de julio, 10:00).
