@@ -278,6 +278,16 @@
   }
   .asis-empty{margin-top:.9rem;font-family:var(--serif);font-style:italic;color:rgba(255,255,255,.85)}
 
+  /* desapuntarse */
+  .undo-btn{
+    display:inline-block;margin-top:1rem;padding:.35rem .6rem;
+    background:transparent;border:none;cursor:pointer;
+    color:#fff;opacity:.85;font-family:var(--sans);font-size:.9rem;text-decoration:underline;
+  }
+  .undo-btn:hover{opacity:1}
+  .undo-btn:focus-visible{outline:2px solid var(--oro);outline-offset:3px;border-radius:6px}
+  .undo-btn:disabled{opacity:.5;cursor:default}
+
   /* cohete */
   #cohete{
     position:fixed;left:50%;bottom:-60px;z-index:60;font-size:2.6rem;
@@ -348,6 +358,7 @@
       <div id="rsvp-done">
         <div class="big">¡Pañuelico arriba! 🧣</div>
         <p>Nos vemos el <strong>6 de julio a las 10:00</strong>. ¡A reventar Dormitalería 74!</p>
+        <button type="button" id="rsvp-undo" class="undo-btn">¿No puedes al final? Desapuntarme</button>
       </div>
 
       <div class="asistentes">
@@ -553,10 +564,16 @@
       nameInput=document.getElementById("rsvp-name"),
       submitBtn=document.getElementById("rsvp-submit"),
       done=document.getElementById("rsvp-done"),
+      undoBtn=document.getElementById("rsvp-undo"),
       cohete=document.getElementById("cohete"),
       asisList=document.getElementById("asis-list"),
       asisCount=document.getElementById("asis-count"),
       asisEmpty=document.getElementById("asis-empty");
+
+  var STORE_KEY="rsvpName";
+  function saveName(n){ try{ localStorage.setItem(STORE_KEY,n); }catch(e){} }
+  function getSavedName(){ try{ return localStorage.getItem(STORE_KEY); }catch(e){ return null; } }
+  function clearName(){ try{ localStorage.removeItem(STORE_KEY); }catch(e){} }
 
   function esc(s){return String(s).replace(/[&<>"']/g,function(c){
     return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
@@ -572,7 +589,22 @@
       if(d&&d.asistentes) renderList(d.asistentes.map(function(a){return a.name;}));
     }).catch(function(){});
   }
+
+  // estado "ya confirmado" (al volver a la página, sin animación)
+  function mostrarConfirmado(){
+    btn.hidden=true; form.hidden=true; done.classList.add("show");
+  }
+  // estado inicial (tras desapuntarse)
+  function reiniciar(){
+    done.classList.remove("show");
+    form.hidden=true;
+    submitBtn.disabled=false; submitBtn.textContent="Confirmar 🧣";
+    nameInput.value="";
+    btn.hidden=false;
+  }
+
   loadList();
+  if(getSavedName()) mostrarConfirmado();
 
   btn.addEventListener("click",function(){
     btn.hidden=true; form.hidden=false; nameInput.focus();
@@ -592,11 +624,35 @@
       return r.json();
     }).then(function(d){
       if(d&&d.asistentes) renderList(d.asistentes.map(function(a){return a.name;}));
+      saveName(name);
       form.hidden=true;
       celebrar();
     }).catch(function(){
       submitBtn.disabled=false; submitBtn.textContent="Confirmar 🧣";
       alert("Uy, no se pudo guardar tu confirmación. Inténtalo otra vez en un momento.");
+    });
+  });
+
+  undoBtn.addEventListener("click",function(){
+    var name=getSavedName();
+    if(!name){ clearName(); reiniciar(); return; }
+    if(!confirm("¿Seguro que quieres desapuntarte del almuerziko?")) return;
+    undoBtn.disabled=true; undoBtn.textContent="Quitando…";
+    fetch("/api/rsvp",{
+      method:"DELETE",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({name:name})
+    }).then(function(r){
+      if(!r.ok) throw new Error("bad");
+      return r.json();
+    }).then(function(d){
+      if(d&&d.asistentes) renderList(d.asistentes.map(function(a){return a.name;}));
+      clearName();
+      undoBtn.disabled=false; undoBtn.textContent="¿No puedes al final? Desapuntarme";
+      reiniciar();
+    }).catch(function(){
+      undoBtn.disabled=false; undoBtn.textContent="¿No puedes al final? Desapuntarme";
+      alert("No se pudo quitar tu confirmación. Inténtalo otra vez en un momento.");
     });
   });
 

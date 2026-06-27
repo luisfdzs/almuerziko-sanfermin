@@ -57,7 +57,24 @@ export default async function handler(req, res) {
       return res.status(200).json({ asistentes });
     }
 
-    res.setHeader("Allow", "GET, POST");
+    if (req.method === "DELETE") {
+      let body = req.body;
+      if (typeof body === "string") {
+        try { body = JSON.parse(body); } catch { body = {}; }
+      }
+      const name = (body && body.name ? String(body.name) : "")
+        .trim()
+        .replace(/\s+/g, " ");
+
+      if (!name) return res.status(400).json({ error: "Falta el nombre" });
+
+      await col.deleteOne({ nameLower: name.toLowerCase() });
+
+      const asistentes = await listaAsistentes(col);
+      return res.status(200).json({ asistentes });
+    }
+
+    res.setHeader("Allow", "GET, POST, DELETE");
     return res.status(405).json({ error: "Método no permitido" });
   } catch (err) {
     console.error("Error en /api/rsvp:", err);

@@ -13,7 +13,7 @@ Los invitados pueden **confirmar asistencia** dejando su nombre, que se guarda e
 Frontend estático + una función serverless. Se despliega en **Vercel** (la web y la API en el mismo proyecto).
 
 - **`index.html`** — toda la web en un único archivo: HTML, CSS (`<style>`) y JS (`<script>`) inline. Sin frameworks ni build en el frontend.
-- **`api/rsvp.js`** — función serverless de Vercel (Node, ESM). `GET` devuelve la lista de asistentes; `POST {name}` añade uno (upsert por nombre normalizado para evitar duplicados). Reutiliza la conexión a Mongo entre invocaciones vía `global._mongoClientPromise`.
+- **`api/rsvp.js`** — función serverless de Vercel (Node, ESM). `GET` devuelve la lista de asistentes; `POST {name}` añade uno (upsert por nombre normalizado para evitar duplicados); `DELETE {name}` lo borra (por nombre normalizado). Reutiliza la conexión a Mongo entre invocaciones vía `global._mongoClientPromise`.
 - **`package.json`** — solo dependencia `mongodb`. El frontend no necesita `npm install`; las dependencias son para la función serverless.
 
 ### Variables de entorno (en Vercel)
@@ -36,7 +36,7 @@ Frontend estático + una función serverless. Se despliega en **Vercel** (la web
 ### JavaScript (IIFE al final del body)
 1. **Cuenta atrás** — `target` es la fecha del evento (`new Date(2026, 6, 6, 10, 0, 0)`; ojo: el mes es 0-indexado, `6` = julio). Actualiza los `#cd-*` cada segundo.
 2. **Confeti** — partículas dibujadas en `<canvas id="confeti">`, lanzadas por `burst()`.
-3. **RSVP + lista** — al pulsar `#rsvp-btn` aparece `#rsvp-form` para escribir el nombre; al enviar hace `POST /api/rsvp`, lanza cohete + confeti y re-renderiza la lista. `loadList()` hace `GET /api/rsvp` al cargar. Los nombres se escapan con `esc()` antes de meterlos en el DOM.
+3. **RSVP + lista** — al pulsar `#rsvp-btn` aparece `#rsvp-form` para escribir el nombre; al enviar hace `POST /api/rsvp`, lanza cohete + confeti y re-renderiza la lista. `loadList()` hace `GET /api/rsvp` al cargar. Los nombres se escapan con `esc()` antes de meterlos en el DOM. El nombre confirmado se guarda en `localStorage` (`rsvpName`): al volver, la página muestra directamente el estado confirmado y el botón `#rsvp-undo` permite **desapuntarse** (`DELETE /api/rsvp`). Cada navegador solo puede borrar el nombre que él mismo guardó.
 
 ## Convenciones
 
