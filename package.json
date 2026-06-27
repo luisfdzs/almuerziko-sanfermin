@@ -1,0 +1,10 @@
+{
+  "name": "almuerziko-sanfermin",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Invitación web del almuerziko de San Fermín 2026 con confirmación de asistencia en MongoDB.",
+  "dependencies": {
+    "mongodb": "^6.3.0"
+  }
+}
