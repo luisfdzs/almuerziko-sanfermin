@@ -278,6 +278,24 @@
   }
   .asis-empty{margin-top:.9rem;font-family:var(--serif);font-style:italic;color:#7a5050}
 
+  /* ventana modal (sustituye a alert) */
+  .modal{
+    position:fixed;inset:0;z-index:100;
+    display:flex;align-items:center;justify-content:center;padding:1.25rem;
+    background:rgba(40,8,8,.55);
+    animation:modal-fade .2s ease;
+  }
+  .modal[hidden]{display:none}
+  .modal-card{
+    background:var(--blanco);border:1px solid var(--borde);
+    border-radius:18px;padding:1.8rem 1.6rem 1.5rem;max-width:340px;width:100%;
+    text-align:center;box-shadow:0 18px 50px rgba(0,0,0,.3);
+    animation:pop .3s ease;
+  }
+  .modal-msg{font-family:var(--serif);font-size:1.05rem;color:var(--rojo-hondo);margin-bottom:1.3rem;line-height:1.45}
+  .modal-card .btn{width:100%}
+  @keyframes modal-fade{from{opacity:0}to{opacity:1}}
+
   /* desapuntarse */
   .undo-btn{
     display:inline-block;margin-top:1rem;padding:.35rem .6rem;
@@ -364,7 +382,7 @@
       </div>
 
       <div class="asistentes">
-        <h3 class="asis-title">Ya han confirmado <span id="asis-count"></span></h3>
+        <h3 class="asis-title" id="asis-title" hidden>Ya han confirmado <span id="asis-count"></span></h3>
         <ul class="asis-list" id="asis-list"></ul>
         <p class="asis-empty" id="asis-empty">Sé el primero en apuntarte 👆</p>
       </div>
@@ -501,6 +519,14 @@
   <div id="cohete">🚀</div>
   <canvas id="confeti"></canvas>
 
+  <!-- ====== MODAL ====== -->
+  <div id="modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modal-msg">
+    <div class="modal-card">
+      <p id="modal-msg" class="modal-msg"></p>
+      <button type="button" id="modal-ok" class="btn">Vale</button>
+    </div>
+  </div>
+
 <script>
 (function(){
   "use strict";
@@ -569,6 +595,7 @@
       undoBtn=document.getElementById("rsvp-undo"),
       cohete=document.getElementById("cohete"),
       asisList=document.getElementById("asis-list"),
+      asisTitle=document.getElementById("asis-title"),
       asisCount=document.getElementById("asis-count"),
       asisEmpty=document.getElementById("asis-empty");
 
@@ -582,7 +609,24 @@
   function esc(s){return String(s).replace(/[&<>"']/g,function(c){
     return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
 
+  /* ===== VENTANA MODAL (sustituye a alert) ===== */
+  var modalEl=document.getElementById("modal"),
+      modalMsg=document.getElementById("modal-msg"),
+      modalOk=document.getElementById("modal-ok");
+  function cerrarModal(){ modalEl.hidden=true; }
+  function modal(mensaje){
+    modalMsg.textContent=mensaje;
+    modalEl.hidden=false;
+    modalOk.focus();
+  }
+  modalOk.addEventListener("click",cerrarModal);
+  modalEl.addEventListener("click",function(e){ if(e.target===modalEl) cerrarModal(); });
+  document.addEventListener("keydown",function(e){
+    if(e.key==="Escape" && !modalEl.hidden) cerrarModal();
+  });
+
   function renderList(names){
+    asisTitle.hidden = names.length === 0;
     asisCount.textContent = names.length ? "· "+names.length : "";
     asisEmpty.hidden = names.length > 0;
     asisList.innerHTML = names.map(function(n){return "<li>"+esc(n)+"</li>";}).join("");
@@ -640,7 +684,7 @@
       celebrar();
     }).catch(function(err){
       submitBtn.disabled=false; submitBtn.textContent="Confirmar 🧣";
-      alert(err.message);
+      modal(err.message);
     });
   });
 
@@ -660,7 +704,7 @@
       reiniciar();
     }).catch(function(err){
       undoBtn.disabled=false; undoBtn.textContent="¿No puedes al final? Desapuntarme";
-      alert(err.message);
+      modal(err.message);
     });
   });
 
