@@ -276,6 +276,8 @@
     border-radius:100px;padding:.4rem .95rem;font-weight:700;font-size:.9rem;color:var(--rojo-hondo);
     box-shadow:0 2px 6px var(--sombra);animation:pop .35s ease;
   }
+  /* ya ha pagado: colores invertidos (letras blancas, fondo rojo) */
+  .asis-list li.pagado{background:var(--rojo);border-color:var(--rojo);color:var(--blanco)}
   .asis-empty{margin-top:.9rem;font-family:var(--serif);font-style:italic;color:#7a5050}
 
   /* ventana modal (sustituye a alert) */
@@ -625,11 +627,22 @@
     if(e.key==="Escape" && !modalEl.hidden) cerrarModal();
   });
 
+  // normaliza un nombre para comparar (minúsculas, sin acentos)
+  function normNombre(s){
+    return String(s).toLowerCase().trim().normalize("NFD").replace(/[̀-ͯ]/g,"");
+  }
+  // quienes ya han pagado los 20 €: se muestran con colores invertidos
+  var PAGADO = ["suaza","galleginhño","acel","la prufe","samu","peii","anitamadrid90","meri","angelito"]
+    .reduce(function(set,n){set[normNombre(n)]=true;return set;},{});
+
   function renderList(names){
     asisTitle.hidden = names.length === 0;
     asisCount.textContent = names.length ? "· "+names.length : "";
     asisEmpty.hidden = names.length > 0;
-    asisList.innerHTML = names.map(function(n){return "<li>"+esc(n)+"</li>";}).join("");
+    asisList.innerHTML = names.map(function(n){
+      var cls = PAGADO[normNombre(n)] ? ' class="pagado"' : "";
+      return "<li"+cls+">"+esc(n)+"</li>";
+    }).join("");
   }
 
   function loadList(){
