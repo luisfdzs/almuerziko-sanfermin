@@ -278,6 +278,8 @@
   }
   /* ya ha pagado: colores invertidos (letras blancas, fondo rojo) */
   .asis-list li.pagado{background:var(--rojo);border-color:var(--rojo);color:var(--blanco)}
+  /* trae su propia comida/bebida (no paga): fondo oro */
+  .asis-list li.aporta{background:var(--oro);border-color:var(--oro);color:var(--tinto)}
   .asis-empty{margin-top:.9rem;font-family:var(--serif);font-style:italic;color:#7a5050}
 
   /* ventana modal (sustituye a alert) */
@@ -632,16 +634,21 @@
     return String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"")
       .replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
   }
-  // quienes ya han pagado los 20 €: se muestran con colores invertidos
-  var PAGADO = ["suaza","galleginhño","acel","la prufe","samu","peii","anitamadrid90","meri","angelito"]
-    .reduce(function(set,n){set[normNombre(n)]=true;return set;},{});
+  function setDeNombres(arr){
+    return arr.reduce(function(set,n){set[normNombre(n)]=true;return set;},{});
+  }
+  // quienes ya han pagado los 20 €: se muestran con colores invertidos (fondo rojo)
+  var PAGADO = setDeNombres(["suaza","galleginhño","acel","la prufe","samu","peii","anitamadrid90","meri","angelito"]);
+  // quienes traen su propia comida/bebida y no pagan: fondo oro
+  var APORTA = setDeNombres(["arrieta","martu","valen","rori","pablo","mike","gamboa","ivan","javi","pepo"]);
 
   function renderList(names){
     asisTitle.hidden = names.length === 0;
     asisCount.textContent = names.length ? "· "+names.length : "";
     asisEmpty.hidden = names.length > 0;
     asisList.innerHTML = names.map(function(n){
-      var cls = PAGADO[normNombre(n)] ? ' class="pagado"' : "";
+      var k = normNombre(n);
+      var cls = PAGADO[k] ? ' class="pagado"' : (APORTA[k] ? ' class="aporta"' : "");
       return "<li"+cls+">"+esc(n)+"</li>";
     }).join("");
   }
