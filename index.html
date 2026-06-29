@@ -627,9 +627,10 @@
     if(e.key==="Escape" && !modalEl.hidden) cerrarModal();
   });
 
-  // normaliza un nombre para comparar (minúsculas, sin acentos)
+  // normaliza un nombre para comparar (minúsculas, sin acentos ni emojis/símbolos)
   function normNombre(s){
-    return String(s).toLowerCase().trim().normalize("NFD").replace(/[̀-ͯ]/g,"");
+    return String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"")
+      .replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
   }
   // quienes ya han pagado los 20 €: se muestran con colores invertidos
   var PAGADO = ["suaza","galleginhño","acel","la prufe","samu","peii","anitamadrid90","meri","angelito"]
