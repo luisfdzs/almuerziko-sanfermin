@@ -629,33 +629,21 @@
     if(e.key==="Escape" && !modalEl.hidden) cerrarModal();
   });
 
-  // normaliza un nombre para comparar (minúsculas, sin acentos ni emojis/símbolos)
-  function normNombre(s){
-    return String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"")
-      .replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
-  }
-  function setDeNombres(arr){
-    return arr.reduce(function(set,n){set[normNombre(n)]=true;return set;},{});
-  }
-  // quienes ya han pagado los 20 €: se muestran con colores invertidos (fondo rojo)
-  var PAGADO = setDeNombres(["suaza","galleginhño","acel","la prufe","samu","peii","anitamadrid90","meri","angelito"]);
-  // quienes traen su propia comida/bebida y no pagan: fondo oro
-  var APORTA = setDeNombres(["arrieta","martu","valen","rori","pablo","mike","gamboa","ivan","javi","pepo"]);
-
-  function renderList(names){
-    asisTitle.hidden = names.length === 0;
-    asisCount.textContent = names.length ? "· "+names.length : "";
-    asisEmpty.hidden = names.length > 0;
-    asisList.innerHTML = names.map(function(n){
-      var k = normNombre(n);
-      var cls = PAGADO[k] ? ' class="pagado"' : (APORTA[k] ? ' class="aporta"' : "");
-      return "<li"+cls+">"+esc(n)+"</li>";
+  // El color del chip lo decide el campo `estado` de la BD:
+  //   pagado → rojo · aporta (trae su comida) → oro · resto → blanco
+  function renderList(asistentes){
+    asisTitle.hidden = asistentes.length === 0;
+    asisCount.textContent = asistentes.length ? "· "+asistentes.length : "";
+    asisEmpty.hidden = asistentes.length > 0;
+    asisList.innerHTML = asistentes.map(function(a){
+      var cls = (a.estado==="pagado"||a.estado==="aporta") ? ' class="'+a.estado+'"' : "";
+      return "<li"+cls+">"+esc(a.name)+"</li>";
     }).join("");
   }
 
   function loadList(){
     fetch("/api/rsvp").then(function(r){return r.json();}).then(function(d){
-      if(d&&d.asistentes) renderList(d.asistentes.map(function(a){return a.name;}));
+      if(d&&d.asistentes) renderList(d.asistentes);
     }).catch(function(){});
   }
 
@@ -699,7 +687,7 @@
     submitBtn.disabled=true; submitBtn.textContent="Enviando…";
     pedir("POST",{name:name, clave:clave}).then(function(res){
       if(!res.ok) throw new Error(res.data&&res.data.error ? res.data.error : "No se pudo guardar");
-      if(res.data.asistentes) renderList(res.data.asistentes.map(function(a){return a.name;}));
+      if(res.data.asistentes) renderList(res.data.asistentes);
       saveName(name); saveClave(clave);
       form.hidden=true;
       celebrar();
@@ -719,7 +707,7 @@
     undoBtn.disabled=true; undoBtn.textContent="Quitando…";
     pedir("DELETE",{name:name, clave:clave}).then(function(res){
       if(!res.ok) throw new Error(res.data&&res.data.error ? res.data.error : "No se pudo quitar");
-      if(res.data.asistentes) renderList(res.data.asistentes.map(function(a){return a.name;}));
+      if(res.data.asistentes) renderList(res.data.asistentes);
       clearName();
       undoBtn.disabled=false; undoBtn.textContent="¿No puedes al final? Desapuntarme";
       reiniciar();
