@@ -280,15 +280,6 @@
   .asis-list li.pagado{background:var(--rojo);border-color:var(--rojo);color:var(--blanco)}
   /* trae su propia comida/bebida (no paga): fondo oro */
   .asis-list li.aporta{background:var(--oro);border-color:var(--oro);color:var(--tinto)}
-  /* leyenda con recuento por color */
-  .asis-leyenda{display:flex;flex-wrap:wrap;gap:.5rem .9rem;justify-content:center;margin-top:.9rem}
-  .asis-leyenda[hidden]{display:none}
-  .ley-item{display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;font-weight:600;color:var(--rojo-hondo)}
-  .ley-dot{width:.85rem;height:.85rem;border-radius:50%;border:1px solid var(--borde);display:inline-block;flex:none}
-  .dot-pagado{background:var(--rojo);border-color:var(--rojo)}
-  .dot-aporta{background:var(--oro);border-color:var(--oro)}
-  .dot-pendiente{background:#fff}
-  .ley-item b{color:var(--rojo)}
   .asis-empty{margin-top:.9rem;font-family:var(--serif);font-style:italic;color:#7a5050}
 
   /* ventana modal (sustituye a alert) */
@@ -396,11 +387,6 @@
 
       <div class="asistentes">
         <h3 class="asis-title" id="asis-title" hidden>Ya han confirmado <span id="asis-count"></span></h3>
-        <div class="asis-leyenda" id="asis-leyenda" hidden>
-          <span class="ley-item"><i class="ley-dot dot-pagado"></i><b id="ley-pagado">0</b></span>
-          <span class="ley-item"><i class="ley-dot dot-aporta"></i><b id="ley-aporta">0</b></span>
-          <span class="ley-item"><i class="ley-dot dot-pendiente"></i><b id="ley-pendiente">0</b></span>
-        </div>
         <ul class="asis-list" id="asis-list"></ul>
         <p class="asis-empty" id="asis-empty">Sé el primero en apuntarte 👆</p>
       </div>
@@ -615,11 +601,7 @@
       asisList=document.getElementById("asis-list"),
       asisTitle=document.getElementById("asis-title"),
       asisCount=document.getElementById("asis-count"),
-      asisEmpty=document.getElementById("asis-empty"),
-      asisLeyenda=document.getElementById("asis-leyenda"),
-      leyPagado=document.getElementById("ley-pagado"),
-      leyAporta=document.getElementById("ley-aporta"),
-      leyPendiente=document.getElementById("ley-pendiente");
+      asisEmpty=document.getElementById("asis-empty");
 
   var STORE_KEY="rsvpName", CLAVE_KEY="rsvpClave";
   function saveName(n){ try{ localStorage.setItem(STORE_KEY,n); }catch(e){} }
@@ -653,16 +635,6 @@
     asisTitle.hidden = asistentes.length === 0;
     asisCount.textContent = asistentes.length ? "· "+asistentes.length : "";
     asisEmpty.hidden = asistentes.length > 0;
-    asisLeyenda.hidden = asistentes.length === 0;
-    var nPag=0, nApo=0, nPen=0;
-    asistentes.forEach(function(a){
-      if(a.estado==="pagado") nPag++;
-      else if(a.estado==="aporta") nApo++;
-      else nPen++;
-    });
-    leyPagado.textContent = nPag;
-    leyAporta.textContent = nApo;
-    leyPendiente.textContent = nPen;
     asisList.innerHTML = asistentes.map(function(a){
       var cls = (a.estado==="pagado"||a.estado==="aporta") ? ' class="'+a.estado+'"' : "";
       return "<li"+cls+">"+esc(a.name)+"</li>";
